@@ -27,32 +27,36 @@ export default {
   ],
   module: {
     loaders: [{
-        // handle js with babel transpiler
-        test: /\.js$/,
-        include: path.join(__dirname, 'src'),
-        loaders: ['babel']
-      },
-      {
-        test: /(\.css)$/,
-        loaders: ['style', 'css']
-      },
-      // --- font handing ---
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file'
-      },
-      {
-        test: /\.(woff|woff2)$/,
-        loader: 'url?prefix=font/&limit=5000'
-      },
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/octet-stream'
-      },
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=image/svg+xml'
-      }
+      // handle js with babel transpiler
+      test: /\.js$/,
+      include: path.join(__dirname, 'src'),
+      loaders: ['babel']
+    },
+    {
+      test: /(\.css)$/,
+      loaders: ['style', 'css']
+    },
+    {
+      test: /\.scss$/,
+      loaders: ['style', 'css', "sass"]
+    },
+    // --- font handing ---
+    {
+      test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'file'
+    },
+    {
+      test: /\.(woff|woff2)$/,
+      loader: 'url?prefix=font/&limit=5000'
+    },
+    {
+      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url?limit=10000&mimetype=application/octet-stream'
+    },
+    {
+      test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url?limit=10000&mimetype=image/svg+xml'
+    }
     ]
   }
 };

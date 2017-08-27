@@ -20,5 +20,9 @@
     "node": true,
     "jquery": true,
     "mocha": true
+  },
+  "rules": {
+    "react/jsx-uses-vars": "error",
+    "react/jsx-uses-react": "error"
   }
 }

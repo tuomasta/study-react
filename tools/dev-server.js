@@ -32,6 +32,6 @@ server.listen(port, function(err) {
   } else {
     // open browser to local host when successful
     open(`http://localhost:${port}`);
-    console.log('App starter in dev mode...'.green);
+    console.log('App started in dev mode...'.green);
   }
 });
