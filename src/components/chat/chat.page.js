@@ -8,20 +8,22 @@ class ChatPage extends React.Component {
 
     render() {
         return (
-            <div>
-                User: {this.props.user.username}
-            </div>
+            <h2>
+                {this.props.channelName}
+            </h2>
         );
     }
 }
 
 ChatPage.propTypes = {
-    user: PropTypes.object.isRequired
+    channelName: PropTypes.string
 }
 
 function mapStateToProps(state) {
     return {
-        user: state.user
+        channelName: state.channel ?
+            `@${state.channel.channelName}` :
+            'Join to a channel'
     };
 }
 
