@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 function ChatMessage({ message }) {
     return (
         <div className="message">
-            <p><b>{message.sender}</b>:</p>
+            <p><b><small>{message.sender}:</small></b></p>
             <p>{message.text}</p>
         </div>
     );

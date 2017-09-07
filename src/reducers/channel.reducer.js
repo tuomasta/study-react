@@ -4,15 +4,18 @@ export default function chanelReducer(state = null, action) {
     switch (action.type) {
         case actionTypes.JOIN_CHANNEL:
             return Object.assign({}, state, {
-                name: action.channelName
+                name: action.channelName,
+                messages: []
             });
         case actionTypes.LOGOUT_USER:
             return null;
-        case actionTypes.LOAD_COURSE_SUCCESS:
+        case actionTypes.MESSAGES_RECEIVED:
             // if log out while loading then do nothing
             if (!state) return state;
             return Object.assign({}, state, {
-                messages: action.messages
+                messages: [
+                    ...state.messages,
+                    ...action.messages]
             });
         default:
             return state;
