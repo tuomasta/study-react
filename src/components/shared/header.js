@@ -39,11 +39,11 @@ class Header extends React.Component {
         if (this.props.isUserLoggedIn) {
             return (
                 <div>
-                    <form className="navbar-form navbar-left">
+                    <div className="navbar-form navbar-left">
                         <JoinChannel
                             onChange={this.handleChange}
                             onJoin={this.joinChannel} />
-                    </form>
+                    </div>
                     <ul className="nav navbar-nav navbar-right">
                         <li>
                             <a href="#">

@@ -2,18 +2,15 @@ import React, { PropTypes } from 'react';
 
 function JoinChannel({ onChange, onJoin }) {
     return (
-        <div className="form-group">
+        <form onSubmit={onJoin}>
             <input
-                placeholder="channel name"
+                placeholder="type a channel to join"
                 id="channel"
                 required
                 type="text"
                 onChange={onChange}
                 className="form-control" />
-            <button
-                onClick={onJoin}
-                className="btn btn-default">Join</button>
-        </div>
+        </form>
     );
 }
 

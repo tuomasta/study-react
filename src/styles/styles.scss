@@ -1,5 +1,4 @@
 .messages-area {
-    border: 2px solid lightgray;
     border-radius: 5px;
     margin-bottom: 15px;
     margin-top: 15px;
@@ -8,7 +7,16 @@
     .message {
         background: whitesmoke;
         border-radius: 5px;
+        border: 1px solid lightgray;
         padding: 5px;
+        margin: 15px 0px;
+    }
+
+    .message:first-child {
+        margin: 0px 0px 15px 0px;
+    }
+    .message:last-child {
+        margin: 15px 0px 0px 0px;
     }
 }
 

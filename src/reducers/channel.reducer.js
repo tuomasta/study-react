@@ -1,6 +1,6 @@
 import * as actionTypes from '../actions/action.types';
 
-export default function chanelReducer(state = null, action) {
+export default function chanelReducer(state = {}, action) {
     switch (action.type) {
         case actionTypes.JOIN_CHANNEL:
             return Object.assign({}, state, {
@@ -8,7 +8,7 @@ export default function chanelReducer(state = null, action) {
                 messages: []
             });
         case actionTypes.LOGOUT_USER:
-            return null;
+            return {};
         case actionTypes.MESSAGES_RECEIVED:
             // if log out while loading then do nothing
             if (!state) return state;

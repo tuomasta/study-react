@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import ChatMessage from './chat-message';
-import ChatInput from './chat-input';
+import ChatChannel from './chat-channel.js'
+import ChatEntry from './chat-entry.js'
 import * as channelActions from '../../actions/channel.actions';
 
 class ChatPage extends React.Component {
@@ -11,31 +11,25 @@ class ChatPage extends React.Component {
 
         this.createMessage = this.createMessage.bind(this);
         this.onInputChanges = this.onInputChanges.bind(this);
-
+        this.registerFocusListener = this.registerFocusListener.bind(this);
         this.state = {
             message: ''
         }
+
+        this.onFocus = null;
     }
 
     componentDidUpdate(prevProps) {
-        if (!prevProps.channel || prevProps.channel.name !== this.props.channel.name) {
-            if (this.props.channel) this.props.channelActions.loadMessages(this.props.channel.name);
+        if (prevProps === this.props) return;
+
+        if (prevProps.channel.name !== this.props.channel.name) {
+            this.props.channelActions.loadMessages(this.props.channel.name);
+            this.setFocusToChat();
         }
     }
 
-    renderMessages() {
-        if (!this.props.channel || !this.props.channel.messages) return null;
-        return (
-            <div className="messages-area">
-                {this.props.channel.messages.map(message => <ChatMessage message={message} />)}
-            </div>
-        );
-    }
-
-    onInputChanges(event) {
-        this.setState({
-            message: event.target.value
-        });
+    registerFocusListener(listener) {
+        this.onFocus = listener;
     }
 
     createMessage(event) {
@@ -44,27 +38,33 @@ class ChatPage extends React.Component {
 
         this.props.channelActions.createMessage(this.props.channel.name, this.props.username, this.state.message);
         this.state.message = '';
+        this.setFocusToChat();
     }
 
-    renderInput() {
-        if (!this.props.channel) return null;
-        return (
-            <ChatInput
-                onSend={this.createMessage}
-                onChange={this.onInputChanges}
-                message={this.state.message} />
-        );
+    setFocusToChat() {
+        if (this.onFocus) this.onFocus();
+    }
+
+    onInputChanges(event) {
+        this.setState({
+            message: event.target.value
+        });
     }
 
     render() {
         return (
             <div className="row">
                 <div className="col-md-12">
-                    <h2>
-                        {this.props.headerText}
-                    </h2>
-                    {this.renderMessages()}
-                    {this.renderInput()}
+                    {
+                        this.props.channel.name ?
+                            <ChatChannel
+                                channel={this.props.channel}
+                                inputMessage={this.state.message}
+                                onCreateMessage={this.createMessage}
+                                onMessageChange={this.onInputChanges}
+                                registerFocusListener={this.registerFocusListener} /> :
+                            <ChatEntry />
+                    }
                 </div>
             </div>
         );
@@ -72,7 +72,6 @@ class ChatPage extends React.Component {
 }
 
 ChatPage.propTypes = {
-    headerText: PropTypes.string,
     username: PropTypes.string.isRequired,
     channel: PropTypes.object,
     channelActions: PropTypes.object.isRequired
@@ -81,10 +80,7 @@ ChatPage.propTypes = {
 function mapStateToProps(state) {
     return {
         username: state.user.username,
-        channel: state.channel,
-        headerText: state.channel ?
-            `@${state.channel.name}` :
-            'Join to a channel'
+        channel: state.channel
     };
 }
 
