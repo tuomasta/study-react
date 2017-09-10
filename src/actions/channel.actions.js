@@ -8,23 +8,26 @@ export function joinChannel(channelName) {
   };
 }
 
-export function loadMessagesSuccess(channelName, messages) {
+export function loadMessagesSuccess(channelName, messages, subscription) {
   return {
     type: types.MESSAGES_RECEIVED,
     channelName,
-    messages
+    messages,
+    subscription
   };
 }
 
 export function loadMessages(channelName) {
   return function (dispatch) {
-    return messageApi
+    let subscription = null;
+    subscription = messageApi
       .getMessages(channelName)
       .subscribe(
-      messages => dispatch(loadMessagesSuccess(channelName, messages)),
+      messages => dispatch(loadMessagesSuccess(channelName, messages, subscription)),
       error => {
         throw (error)
       });
+    return subscription;
   }
 }
 

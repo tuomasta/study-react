@@ -5,11 +5,8 @@ import ChatInput from './chat-input';
 class ChatChannel extends React.Component {
     constructor(props, context) {
         super(props, context);
+        this.onSendMessageWrapper = this.onSendMessageWrapper.bind(this);
         this.messagesEnd = null;
-    }
-
-    componentDidUpdate() {
-        if (this.messagesEnd) this.messagesEnd.scrollIntoView();
     }
 
     renderMessages() {
@@ -23,6 +20,11 @@ class ChatChannel extends React.Component {
         );
     }
 
+    onSendMessageWrapper(event) {
+        this.props.onCreateMessage(event);
+        if (this.messagesEnd) this.messagesEnd.scrollIntoView();
+    }
+
     render() {
         return (
             <div className="container">
@@ -31,7 +33,7 @@ class ChatChannel extends React.Component {
                 </h2>
                 {this.renderMessages()}
                 <ChatInput
-                    onSend={this.props.onCreateMessage}
+                    onSend={this.onSendMessageWrapper}
                     onChange={this.props.onMessageChange}
                     inputMessage={this.props.inputMessage}
                     registerFocusListener={this.props.registerFocusListener} />

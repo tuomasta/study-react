@@ -6,20 +6,43 @@ class MessageApi {
   }
 
   getMessages(channel) {
-    this.subject = new Rx.BehaviorSubject([{
-      sender: 'chatbot',
-      text: `Hello there, welcome to @${channel}`
-    }]);
+    // TODO: using poll here
+    // should be changed to SSE or signalR
+    // also not quite sure about the idea starting to poll
+    // with get messages. Maybe refactor to two separate api call
 
-    return this.subject;
+    const pollInterval = 1000;
+    let startIndex = 0;
+    const pollMessages = Rx.Observable
+      .interval(pollInterval)
+      .flatMap(() => this.fetchMessages(channel, startIndex));
+
+    return this.fetchMessages(channel, startIndex)
+      .merge(pollMessages)
+      .do(messages => startIndex += messages.length)
+      // eslint-disable-next-line no-console
+      .finally(() => console.log('Unsubscribed the message polling!'));
   }
 
   createMessage(channel, user, message) {
-    this.subject.next([{
-      sender: user,
-      text: message
-    }]);
-    return Rx.Observable.of(1);
+    return Rx.Observable.ajax({
+      url: this.getUrl(channel),
+      method: 'POST',
+      body: {
+        sender: user,
+        text: message
+      }
+    });
+  }
+
+  fetchMessages(channel, fromIndex) {
+    let uri = this.getUrl(channel);
+    if (fromIndex) uri += `?fromIndex=${fromIndex}`;
+    return Rx.Observable.ajax(uri).map(r => r.response);
+  }
+
+  getUrl(channel) {
+    return `http://localhost:4200/api/v1/channel/${channel}/messages`;
   }
 }
 
